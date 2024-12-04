@@ -16,8 +16,7 @@ e = math.sqrt(e1 * e2) # coefficient of restitution between tennis ball and bask
 mass1 = float(input('Mass 1/kg: '))
 mass2 = float(input('Mass 2/kg: '))
 height2 = float(input('Length of mass 2/m: '))
-h = float(input('Height/m: '))
-t = float(input('Collision time between both masses'))
+h = float(input('Height/m: '))  
 h += height2
 
 #######################################################################################################################################
