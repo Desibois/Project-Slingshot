@@ -48,7 +48,7 @@ v
 a = -9.81
 #t - Unnecessary
 
-s = (v^2 - u^2) /2*a
+s = (v**2 - u**2) /2*a
 
 #Displacement from initial height
 s -= h
