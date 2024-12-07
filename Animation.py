@@ -6,6 +6,8 @@ import threading
 g = 25
 h = 250
 timestep = 0.03
+l = -497
+f = False
 
 class Ball(turtle.Turtle):
     def __init__(self, mass=0.0, radius=0.0, COR=0.0 ):
@@ -28,17 +30,15 @@ class BasketBall(Ball):
         self.sety(self.height)
 
     def fallDown(self):
-        while True:
-            self.velocity -= g*timestep  
-            new_y = self.ycor() + self.velocity
-            if new_y - self.radius <= -497:  
-                break
+        global f
+        self.velocity -= g*timestep  
+        new_y = self.ycor() + self.velocity
+        if new_y - self.radius <= l:
+            new_y = l + self.radius
+            f = True
+        self.sety(new_y)    
 
-            self.sety(new_y)    
-            time.sleep(timestep)
         
-
-
 
 class TennisBall(Ball):
     def __init__(self):
@@ -49,18 +49,15 @@ class TennisBall(Ball):
         self.sety(self.height + self.radius + radius)
 
     def fallDown(self, diameter):
-        time.sleep(timestep)
-        while True:
-            self.velocity -= g*timestep
-            new_y = self.ycor() + self.velocity
-            if new_y - self.radius - diameter <= -497:  
-                break
-
-            self.sety(new_y)    
-            time.sleep(timestep)
+        global f
+        self.velocity -= g*timestep
+        new_y = self.ycor() + self.velocity
+        if new_y - self.radius - diameter <= l:      
+            new_y = l + diameter + self.radius
+            f = True
+        self.sety(new_y)    
+ 
     
-
-
 
 
 screen = turtle.Screen()
@@ -74,10 +71,15 @@ diameter = ball2.radius * 2
 ball1.originalHeight(ball2.radius)
 ball2.originalHeight()
 
-thread1 = threading.Thread(target=ball1.fallDown, args=(diameter,))
-thread2 = threading.Thread(target=ball2.fallDown)
+def update_simulation():
+    if not f:
+        ball1.fallDown(ball2.radius*2)
+        ball2.fallDown()
 
-thread1.start()
-thread2.start()
+        screen.ontimer(update_simulation, int(timestep * 1000))
+    else:
+        print(f)
+
+update_simulation()
 
 screen.mainloop()
